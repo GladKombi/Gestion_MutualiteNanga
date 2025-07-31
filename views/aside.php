@@ -13,6 +13,14 @@
                 </a>
             </li>
             <li>
+                <a href="adhesion.php" class="flex items-center p-2 text-gray-700 dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 rounded">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Adhesion
+                </a>
+            </li>
+            <li>
                 <a href="typeCotisation.php" class="flex items-center p-2 text-gray-700 dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 rounded">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M3 7h18M3 12h18M3 17h18" stroke-linecap="round" stroke-linejoin="round" />
@@ -21,7 +29,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 rounded">
+                <a href="cotisation.php" class="flex items-center p-2 text-gray-700 dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 rounded">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
@@ -29,7 +37,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 rounded">
+                <a href="paiement.php" class="flex items-center p-2 text-gray-700 dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 rounded">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>

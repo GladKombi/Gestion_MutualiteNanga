@@ -2,7 +2,7 @@
 # Connexion à la BD
 include '../connexion/connexion.php'; //
 # Appel de la page qui fait les affichages
-require_once('../models/select/select-TypeCoti.php');
+require_once('../models/select/select-Adhesion.php');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -10,7 +10,7 @@ require_once('../models/select/select-TypeCoti.php');
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Type Cotisations</title>
+    <title>Adhesion</title>
     <?php require_once('style.php') ?>
 
 </head>
@@ -23,7 +23,7 @@ require_once('../models/select/select-TypeCoti.php');
     <div class="flex-1 flex flex-col">
         <!-- NAVBAR -->
         <header class="flex items-center justify-between bg-white dark:bg-gray-800 shadow px-4 py-3">
-            <h2 class="text-lg font-semibold text-primary">Type Cotisations</h2>
+            <h2 class="text-lg font-semibold text-primary">Adhesion</h2>
             <div class="flex items-center gap-4">
                 <button onclick="toggleDarkMode()" class="text-gray-600 dark:text-white">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -36,7 +36,8 @@ require_once('../models/select/select-TypeCoti.php');
 
         <!-- MAIN -->
         <main class="p-4 overflow-auto">
-            <button onclick="openModal('modalEdit')" class="mb-4 px-4 py-2 bg-primary text-white rounded"> Nouveau Type de cotisation</button>
+            <!-- <a href="annee.php" class="mb-4 px-4 py-2 bg-primary text-white rounded">Nouvelle annee</a> -->
+            <button onclick="openModal('modalAdhesion')" class="mb-4 px-4 py-2 bg-primary text-white rounded"> Paiement Adhesion</button>
             <?php
             if (isset($_SESSION['msg']) && !empty($_SESSION['msg'])) { ?>
                 <div class="w-full mt-3">
@@ -47,19 +48,41 @@ require_once('../models/select/select-TypeCoti.php');
             <?php }
             #Cette ligne permet de vider la valeur qui se trouve dans la session message
             unset($_SESSION['msg']);
-            if (isset($_GET["idType"])) {
+            if (isset($_GET["idadhesion"])) {
+
             ?>
                 <div class="bg-white dark:bg-gray-800 p-6 rounded shadow mb-6">
                     <div class="bg-white dark:bg-gray-800 p-6 rounded shadow mb-6">
                         <h2 class="text-2xl mb-4 font-bold text-center"><?= $title ?></h2>
-                        <form class="space-y-4" action="<?= $url ?>" method="POST">
-                            <div>
-                                <label class="block mb-1 font-semibold">Description type de cotisation <span class="text-red-600"> *</span></label>
-                                <input type="text" name="description" class="w-full p-2 rounded border border-gray-300 dark:bg-gray-700 dark:border-gray-600" <?php if (isset($_GET['idType'])) { ?>value="<?= $tab['description'] ?>" <?php } ?>/>
+                        <form action="<?= $url ?>" method="POST" enctype="multipart/form-data">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block mb-1">Membre <span class="text-red-600"> *</span></label>
+                                    <select name="membre" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white">
+                                        <?php while ($membre = $getMembreMod->fetch()) {
+                                            if (isset($_GET["idadhesion"])) {
+                                        ?>
+                                                <option value="<?= $membre['id'] ?>" <?php if ($membre['id'] == $membreModif) echo 'selected'; ?>>
+                                                    <?= $membre['nom'] . " " . $membre['postnom'] . " " . $membre['prenom'] ?>
+                                                </option>
+                                            <?php
+                                            } else { ?>
+                                                <option value="<?= $membre['id'] ?>">
+                                                    <?= $membre['nom'] . " " . $membre['postnom'] . " " . $membre['prenom'] ?>
+                                                </option>
+                                        <?php
+                                            }
+                                        } ?>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block mb-1">Montant de la cotisation<span class="text-red-600"> *</span></label>
+                                    <input type="text" name="montant" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Enter le postnom" <?php if (isset($_GET['idadhesion'])) { ?>value="<?= $tab['montant'] ?>" <?php } ?> />
+                                </div>
                             </div>
                             <div class="flex justify-end gap-2">
-                                <a href="typeCotisation.php" class="px-4 py-2 rounded border dark:border-gray-400 bg-red-600 text-white">Annuler</a>
-                                <button type="submit" name="Valider" class="px-4 py-2 bg-blue-600 text-white rounded">Modifier</button>
+                                <button type="button" onclick="closeModal('modalAdhesion')" class="px-4 py-2 rounded border dark:border-gray-400">Annuler</button>
+                                <button type="submit" name="Valider" class="px-4 py-2 bg-blue-600 text-white rounded"><?= $btn?></button>
                             </div>
                         </form>
                     </div>
@@ -73,24 +96,30 @@ require_once('../models/select/select-TypeCoti.php');
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Description Typr de cotisation</th>
+                            <th>Date</th>
+                            <th>ID Membre</th>
+                            <th>Profil</th>
+                            <th>Montant</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $num = 0;
-                        while ($TypeC = $getData->fetch()) {
+                        while ($adhesion = $getData->fetch()) {
                             $num++;
                         ?>
                             <tr class="border-b dark:border-gray-700 <?= $num % 2 === 0 ? 'bg-green-50 dark:bg-gray-600' : '' ?>">
                                 <td class="p-2"><?php echo $num ?></td>
-                                <td class="p-2"><?php echo $TypeC["description"] ?></td>
+                                <td class="p-2"><?php echo $adhesion["date"] ?></td>
+                                <td class="p-2"><?php echo $adhesion["nom"] . " " . $adhesion["prenom"] . " " . $adhesion["postnom"]  ?></td>
+                                <td class="p-2"><img src="../img/<?= $adhesion["photo"] ?>" alt="" class="w-11 h-11 rounded-full cursor-pointer"></td>
+                                <td class="p-2"><?php echo $adhesion["montant"] ?></td>
                                 <td class="flex gap-2 p-2">
-                                    <a href="typeCotisation.php?idType=<?= $TypeC["id"] ?>" class="text-blue-600 hover:text-blue-800" title="Modifier">
+                                    <a href="adhesion.php?idadhesion=<?= $adhesion["id"] ?>" class="text-blue-600 hover:text-blue-800" title="Modifier">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
-                                    <button onclick="openDeleteModal('<?= $TypeC['id'] ?>')" title="Supprimer" class="text-red-600 hover:text-red-800">
+                                    <button onclick="openDeleteModal('<?= $adhesion['id'] ?>')" title="Supprimer" class="text-red-600 hover:text-red-800">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </td>
@@ -109,21 +138,30 @@ require_once('../models/select/select-TypeCoti.php');
         </main>
     </div>
 
-    <!-- Modal Modification élargi + deux colonnes -->
-    <div id="modalEdit" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <!-- Modal Enregistrement de paiement frais d'ahdesion-->
+    <div id="modalAdhesion" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white dark:bg-gray-800 p-6 rounded shadow-md w-full max-w-2xl">
-            <h2 class="text-xl font-bold mb-4 text-center">Ajouter un type de cotisation</h2>
-            <form class="space-y-4" action="<?= $url ?>" method="POST">
-                <div>
-                    <label class="block mb-1 font-semibold">Description type de cotisation <span class="text-red-600"> *</span></label>
-                    <input type="text" name="description" class="w-full p-2 rounded border border-gray-300 dark:bg-gray-700 dark:border-gray-600" />
+            <h2 class="text-xl font-bold mb-4 text-center">Reglement Frais d'adhesion</h2>
+            <form action="<?= $Action ?>" method="POST">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block mb-1">Membre <span class="text-red-600"> *</span></label>
+                        <select name="membre" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white">
+                            <?php while ($membre = $getMembre->fetch()) { ?>
+                                <option value="<?= $membre['id'] ?>"><?= $membre['nom'] . " " . $membre['postnom'] . " " . $membre['prenom'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-1">Montant de la cotisation<span class="text-red-600"> *</span></label>
+                        <input type="text" name="montant" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Enter le postnom" />
+                    </div>
                 </div>
                 <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeModal('modalEdit')" class="px-4 py-2 rounded border dark:border-gray-400">Annuler</button>
+                    <button type="button" onclick="closeModal('modalAdhesion')" class="px-4 py-2 rounded border dark:border-gray-400">Annuler</button>
                     <button type="submit" name="Valider" class="px-4 py-2 bg-blue-600 text-white rounded">Enregistrer</button>
                 </div>
             </form>
-
         </div>
     </div>
 
@@ -155,7 +193,7 @@ require_once('../models/select/select-TypeCoti.php');
             hiddenDeleteId.value = id;
 
             // Définir le lien de suppression. Adaptez l'URL selon votre backend (ex: delete_membre.php?id=...)
-            confirmButton.href = `../models/delete/delete_Type.php?id=${id}`; // Assurez-vous que votre script de suppression gère cet ID
+            confirmButton.href = `../models/delete/delete_Adhesion.php?id=${id}`; // Assurez-vous que votre script de suppression gère cet ID
 
             modal.classList.remove('hidden'); // Afficher le modal
             document.body.classList.add('overflow-hidden'); // Empêcher le défilement du corps

@@ -6,29 +6,29 @@ if (isset($_POST['Valider'])) {
     $statut = 0;
     if (!empty($description)) {
         #verifier si l'utilisateur existe ou pas dans la bd
-        $getCatDeplicant = $connexion->prepare("SELECT * FROM `categorie` WHERE `description`=? AND `statut`=?");
+        $getCatDeplicant = $connexion->prepare("SELECT * FROM `type_cotisation` WHERE `description`=? AND `statut`=?");
         $getCatDeplicant->execute([$description, $statut]);
         $tab = $getCatDeplicant->fetch();
         if ($tab > 0) {
-            $_SESSION['msg'] = "Il existe deja une categorie similaire dans la base de donées. Verifier SVP!";
-            header("location:../../views/categorie.php");
+            $_SESSION['msg'] = "Il existe deja un type de cotisation similaire dans la base de donées. Verifier SVP!";
+            header("location:../../views/typeCotisation.php");
         } else {
             # Insertion data from database
-            $req = $connexion->prepare("INSERT INTO categorie(`description`, statut) values (?,?)");
+            $req = $connexion->prepare("INSERT INTO type_cotisation(`description`, statut) values (?,?)");
             $resultat = $req->execute([$description, $statut]);
             #Si oui, la variable resultat va retourée true, donc il y a eu un enregistrement
             if ($resultat == true) {
-                $_SESSION['msg'] = "Une nouvelle categorie viens d'etre ajouter !"; 
-                header("location:../../views/categorie.php");
+                $_SESSION['msg'] = "Une nouveau type de Cotisation viens d'etre ajouter !"; 
+                header("location:../../views/typeCotisation.php");
             } else {
                 $_SESSION['msg'] = "Echec d'enreigistrement"; 
-                header("location:../../views/categorie.php");
+                header("location:../../views/typeCotisation.php");
             }
         }
     } else {
         $_SESSION['msg'] = "Veillez Vefier les champs Svp !"; 
-        header("location:../../views/categorie.php");
+        header("location:../../views/typeCotisation.php");
     }
 } else {
-    header("location:../../views/categorie.php");
+    header("location:../../views/typeCotisation.php");
 }

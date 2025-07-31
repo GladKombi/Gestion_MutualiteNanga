@@ -19,10 +19,8 @@ if (isset($_GET['idMembre'])) {
     $title = "Ajouter un membre";
     $btn = "Enregistrer";
 }
-$statut=0;
-// # Selection des categories
-// $getCat = $connexion->prepare("SELECT * FROM `categorie` WHERE statut=?");
-// $getCat->execute([$statut]);
+$statut = 0;
+$approbation = 1;
 # Selection des membres
-$getData = $connexion->prepare("SELECT `membre`.* FROM `membre` WHERE  `membre`.statut=? ORDER BY membre.id Desc;");
-$getData->execute([$statut]);
+$getData = $connexion->prepare("SELECT `membre`.* FROM `membre` WHERE  `membre`.statut=? AND `membre`.approbation=? ORDER BY membre.id Desc;");
+$getData->execute([$statut, $approbation]);

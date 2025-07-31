@@ -13,7 +13,7 @@ if (isset($_POST['Valider'])) {
     $fonction = htmlspecialchars($_POST['fonction']);
     $pwd = htmlspecialchars($_POST['pwd']);
     $statut = 0;
-
+    $approbation = 0;
     #verifier si l'utilisateur existe ou pas dans la bd
     $getUserDeplicant = $connexion->prepare("SELECT * FROM `membre` WHERE email=? AND statut=?");
     $getUserDeplicant->execute([$mail, $statut]);
@@ -29,8 +29,8 @@ if (isset($_POST['Valider'])) {
         $newimage = RecuperPhoto($fichier_tmp, $nom_original, $destination);
         $statut = 0;
         # Insertion data from database
-        $req = $connexion->prepare("INSERT INTO `membre`(`nom`, `postnom`,`prenom`, `email`, `adresse`, `fonction`, `pwd`, `photo`, `statut`) VALUES (?,?,?,?,?,?,?,?,?)");
-        $resultat = $req->execute([$nom, $postnom, $prenom, $mail, $Adress, $fonction, $pwd, $newimage, $statut]);
+        $req = $connexion->prepare("INSERT INTO `membre`(`nom`, `postnom`,`prenom`, `email`, `adresse`, `fonction`, `pwd`, `photo`, `statut`,`approbation` ) VALUES (?,?,?,?,?,?,?,?,?,?)");
+        $resultat = $req->execute([$nom, $postnom, $prenom, $mail, $Adress, $fonction, $pwd, $newimage, $statut, $approbation]);
         if ($resultat == true) {
             $_SESSION['msg'] = "Enregistrement reussi !";
             header("location:../../views/membre.php");

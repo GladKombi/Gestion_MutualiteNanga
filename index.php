@@ -1,146 +1,256 @@
-<?php
-session_start();
-
-// -- Changement de thème (cookie) --
-if (isset($_POST['theme'])) {
-    setcookie('theme', $_POST['theme'], time() + (3600 * 24 * 30), "/");
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
-}
-
-// -- Lecture du thème --
-$theme = $_COOKIE['theme'] ?? 'light';
-
-// -- Simulation de vérification des identifiants --
-$users = [
-    ['email' => 'admin@example.com', 'password' => password_hash('123456', PASSWORD_DEFAULT)]
-];
-
-$error = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['password']) && !isset($_POST['theme'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    foreach ($users as $user) {
-        if ($user['email'] === $email && password_verify($password, $user['password'])) {
-            $_SESSION['user'] = $email;
-            header('Location: dashboard.php');
-            exit;
-        }
-    }
-
-    $error = 'Identifiants invalides';
-}
-?>
 <!DOCTYPE html>
-<html lang="fr" class="<?= $theme === 'dark' ? 'dark' : '' ?>">
+<html lang="fr">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>Connexion</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class'
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Association des Jeunes Solidaire</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            transition: background-color 0.3s, color 0.3s;
         }
-    </script>
+
+        .slider {
+            position: relative;
+            overflow: hidden;
+            height: 400px;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .active {
+            opacity: 1;
+        }
+
+        .slide-content {
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+        }
+
+        .button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen flex items-center justify-center relative">
+<body class="bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-200">
 
-    <!-- Bouton switch thème -->
-    <form method="post" class="absolute top-4 right-4 z-50">
-        <button name="theme" value="<?= $theme === 'dark' ? 'light' : 'dark' ?>"
-            class="w-10 h-10 flex items-center justify-center rounded-full
-           bg-gray-200 text-gray-700 hover:bg-gray-300 shadow-md
-           dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 transition-all duration-300"
-            title="Changer de thème">
-
-            <?php if ($theme === 'dark'): ?>
-                <!-- Soleil -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 4V2m0 20v-2m4.22-13.78l1.42-1.42M4.93 19.07l1.42-1.42M20 12h2M2 12h2m13.78 4.22l1.42 1.42M4.93 4.93l1.42 1.42M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-            <?php else: ?>
-                <!-- Lune -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 12.79A9 9 0 1111.21 3a7 7 0 0010.59 9.79z" />
-                </svg>
-            <?php endif; ?>
-        </button>
-    </form>
-
-
-    <!-- Carte connexion -->
-    <div class="flex w-full max-w-5xl shadow-lg bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
-
-        <!-- Section logo -->
-        <div class="hidden md:flex flex-col justify-center items-center bg-blue-600 dark:bg-blue-700 text-white w-1/2 p-8">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_Tailwind_CSS.svg" alt="Logo"
-                class="w-20 h-20 mb-6" />
-            <h2 class="text-2xl font-bold mb-2">Bienvenue !</h2>
-            <p class="text-sm text-blue-100 text-center px-6">Connecte-toi pour accéder à ton espace personnel.</p>
-        </div>
-
-        <!-- Formulaire -->
-        <div class="w-full md:w-1/2 p-8">
-            <h2 class="text-2xl font-semibold text-center mb-6">Connexion</h2>
-
-            <?php if ($error): ?>
-                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                    <?= htmlspecialchars($error) ?>
-                </div>
-            <?php endif; ?>
-
-            <form action="" method="post" class="space-y-5">
-                <!-- Email -->
-                <div>
-                    <label for="email" class="block mb-1 text-sm font-medium">Adresse e-mail</label>
-                    <div class="flex items-center border border-gray-300 dark:border-gray-700 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 dark:text-gray-300 mr-2"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 12H8m0 0l4-4m-4 4l4 4" />
-                        </svg>
-                        <input type="email" name="email" id="email" required
-                            class="w-full bg-transparent outline-none text-gray-900 dark:text-white placeholder-gray-400"
-                            placeholder="ex: nom@domaine.com" />
-                    </div>
-                </div>
-
-                <!-- Mot de passe -->
-                <div>
-                    <label for="password" class="block mb-1 text-sm font-medium">Mot de passe</label>
-                    <div class="flex items-center border border-gray-300 dark:border-gray-700 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 dark:text-gray-300 mr-2"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5 9 6.343 9 8s1.343 3 3 3zm0 0v1m0 4v.01" />
-                        </svg>
-                        <input type="password" name="password" id="password" required
-                            class="w-full bg-transparent outline-none text-gray-900 dark:text-white placeholder-gray-400"
-                            placeholder="••••••••" />
-                    </div>
-                </div>
-
-                <!-- Bouton connexion -->
-                <button type="submit"
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
-                    Se connecter
+    <!-- En-tête -->
+    <header class="bg-blue-600 text-white">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Association des Jeunes</h1>
+            <div class="relative">
+                <nav>
+                    <ul class="flex space-x-4">
+                        <li><a href="#presentation" class="hover:underline">Présentation</a></li>
+                        <li><a href="#services" class="hover:underline">Nos Services</a></li>
+                        <li><a href="#news" class="hover:underline">Nouvelles</a></li>
+                        <li><a href="#contact" class="hover:underline">Contact</a></li>
+                        <li class="relative">
+                            <button id="dropdownButton" class="hover:underline focus:outline-none">Connexion</button>
+                            <div id="dropdownMenu" class="absolute right-0 z-10 hidden bg-white text-gray-800 shadow-lg mt-2 rounded">
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100">Se connecter</a>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100">S'inscrire</a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+                <button id="theme-toggle" class="text-white ml-4">
+                    <svg id="theme-toggle-dark-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                    </svg>
+                    <svg id="theme-toggle-light-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
+                    </svg>
                 </button>
-            </form>
-
-            <p class="text-center mt-4 text-sm text-gray-600 dark:text-gray-400">
-                Mot de passe oublié ? <a href="#" class="text-blue-600 hover:underline">Réinitialiser</a>
-            </p>
+            </div>
         </div>
-    </div>
+    </header>
+
+    <!-- Section de bienvenue avec slider -->
+    <section id="presentation" class="py-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4">Bienvenue à notre Association</h2>
+            <div class="slider">
+                <div class="slide active" style="background-image: url('img/img1.jpg'); background-size: cover; background-position: center;">
+                    <div class="slide-content">
+                        <h3 class="text-xl font-bold">Épanouissement Personnel</h3>
+                        <p>Rejoignez-nous pour développer vos compétences et talents.</p>
+                    </div>
+                </div>
+                <div class="slide" style="background-image: url('img/img3.jpg'); background-size: cover; background-position: center;">
+                    <div class="slide-content">
+                        <h3 class="text-xl font-bold">Solidarité et Entraide</h3>
+                        <p>Un espace pour partager et se soutenir mutuellement.</p>
+                    </div>
+                </div>
+                <div class="slide" style="background-image: url('img/img2.jpg'); background-size: cover; background-position: center;">
+                    <div class="slide-content">
+                        <h3 class="text-xl font-bold">Événements Sociaux</h3>
+                        <p>Participez à des événements et rencontrez d'autres jeunes.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between mt-4">
+                <button class="button" onclick="prevSlide()">❮</button>
+                <button class="button" onclick="nextSlide()">❯</button>
+            </div>
+            <div class="flex justify-center mt-6">
+                <a href="#services" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Découvrez nos activités</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section des services -->
+    <section id="services" class="bg-white py-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-6">Nos Services</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-200 p-4 rounded-lg shadow">
+                    <h3 class="font-semibold text-lg">Ateliers de Formation</h3>
+                    <p>Des formations variées pour développer vos compétences et vos talents.</p>
+                    <img src="img/img1.jpg" alt="Ateliers de Formation" class="mt-2 rounded">
+                </div>
+                <div class="bg-gray-200 p-4 rounded-lg shadow">
+                    <h3 class="font-semibold text-lg">Événements Sociaux</h3>
+                    <p>Participez à des événements pour rencontrer d'autres jeunes et créer des liens.</p>
+                    <img src="img/img3.jpg" alt="Événements Sociaux" class="mt-2 rounded">
+                </div>
+                <div class="bg-gray-200 p-4 rounded-lg shadow">
+                    <h3 class="font-semibold text-lg">Soutien Psychologique</h3>
+                    <p>Des services d'écoute et de soutien pour traverser les moments difficiles.</p>
+                    <img src="img/img2.jpg" alt="Soutien Psychologique" class="mt-2 rounded">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section des nouvelles -->
+    <section id="news" class="bg-gray-100 py-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-6">Nouvelles de l'Association</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <img src="img/img3.jpg" alt="Activité 1" class="rounded mb-2">
+                    <h3 class="font-semibold text-lg">Atelier de Création Artistique</h3>
+                    <p>Rejoignez-nous pour un atelier où vous pourrez exprimer votre créativité à travers l'art.</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <img src="img/img2.jpg" alt="Activité 2" class="rounded mb-2">
+                    <h3 class="font-semibold text-lg">Journée de Nettoyage</h3>
+                    <p>Participez à notre journée de nettoyage pour faire une différence dans notre communauté.</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <img src="img/img1.jpg" alt="Activité 3" class="rounded mb-2">
+                    <h3 class="font-semibold text-lg">Soirée de Jeux</h3>
+                    <p>Venez vous amuser lors de notre soirée de jeux et rencontrer d'autres membres de l'association.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section de contact -->
+    <section id="contact" class="py-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-6">Contactez-nous</h2>
+            <form class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow">
+                <div class="mb-4">
+                    <label class="block mb-2" for="name">Nom</label>
+                    <input class="w-full p-2 border rounded" type="text" id="name" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block mb-2" for="email">Email</label>
+                    <input class="w-full p-2 border rounded" type="email" id="email" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block mb-2" for="message">Message</label>
+                    <textarea class="w-full p-2 border rounded" id="message" rows="4" required></textarea>
+                </div>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="submit">Envoyer</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Pied de page -->
+    <footer class="bg-blue-600 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2023 Association des Jeunes. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        // Initial display
+        showSlide(currentIndex);
+
+        document.getElementById("theme-toggle").addEventListener("click", function() {
+            document.body.classList.toggle("dark");
+            const darkIcon = document.getElementById("theme-toggle-dark-icon");
+            const lightIcon = document.getElementById("theme-toggle-light-icon");
+            darkIcon.classList.toggle("hidden");
+            lightIcon.classList.toggle("hidden");
+        });
+
+        // Dropdown menu
+        document.getElementById("dropdownButton").addEventListener("click", function() {
+            document.getElementById("dropdownMenu").classList.toggle("hidden");
+        });
+
+        window.onclick = function(event) {
+            if (!event.target.matches('#dropdownButton')) {
+                const dropdowns = document.getElementsByClassName("hidden");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    dropdowns[i].classList.add('hidden');
+                }
+            }
+        }
+    </script>
 </body>
 
 </html>

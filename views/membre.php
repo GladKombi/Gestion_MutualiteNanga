@@ -56,11 +56,11 @@ require_once('../models/select/select-Membre.php');
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <div>
                                     <label class="block mb-1">Nom <span class="text-red-600"> *</span></label>
-                                    <input type="text" name="nom" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Enter le nom" <?php if (isset($_GET['idMembre'])) { ?>value="<?= $tab['nom'] ?>" <?php } ?> />
+                                    <input type="text" name="nom" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" <?php if (isset($_GET['idMembre'])) { ?>value="<?= $tab['nom'] ?>" <?php } ?> />
                                 </div>
                                 <div>
                                     <label class="block mb-1">Postnom <span class="text-red-600"> *</span></label>
-                                    <input type="text" name="postnom" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Enter le postnom" <?php if (isset($_GET['idMembre'])) { ?>value="<?= $tab['postnom'] ?>" <?php } ?> />
+                                    <input type="text" name="postnom" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" <?php if (isset($_GET['idMembre'])) { ?>value="<?= $tab['postnom'] ?>" <?php } ?> />
                                 </div>
                                 <div>
                                     <label class="block mb-1">Prenom <span class="text-red-600"> *</span></label>
@@ -151,31 +151,31 @@ require_once('../models/select/select-Membre.php');
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="block mb-1">Nom <span class="text-red-600"> *</span></label>
-                        <input type="text" name="nom" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
+                        <input type="text" name="nom" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Enter le nom" />
                     </div>
                     <div>
                         <label class="block mb-1">Postnom <span class="text-red-600"> *</span></label>
-                        <input type="text" name="postnom" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
+                        <input type="text" name="postnom" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Enter le postnom" />
                     </div>
                     <div>
                         <label class="block mb-1">Prenom <span class="text-red-600"> *</span></label>
-                        <input type="text" name="prenom" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
+                        <input type="text" name="prenom" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Enter le prenom" />
                     </div>
                     <div>
                         <label class="block mb-1">Adresse <span class="text-red-600"> *</span></label>
-                        <input type="text" name="adresse" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
+                        <input type="text" name="adresse" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Enter l'adresse" />
                     </div>
                     <div>
                         <label class="block mb-1">Fonction <span class="text-red-600"> *</span></label>
-                        <input type="text" name="fonction" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
+                        <input type="text" name="fonction" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Enter la fonction"  />
                     </div>
                     <div>
                         <label class="block mb-1">Mot de passe <span class="text-red-600"> *</span></label>
-                        <input type="text" name="pwd" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
+                        <input type="text" name="pwd" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="EX: 12345"  />
                     </div>
                     <div>
                         <label class="block mb-1">Email <span class="text-red-600"> *</span></label>
-                        <input type="email" name="mail" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
+                        <input type="email" name="mail" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Nanga@gmail.com"  />
                     </div>
                     <div>
                         <label class="block mb-1">Photo de profil <span class="text-red-600"> *</span></label>
