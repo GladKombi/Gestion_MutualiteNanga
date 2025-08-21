@@ -10,7 +10,7 @@ require_once('../models/select/select-cotisation.php');
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cotisations</title>
+    <title>Js_Butembo</title>
     <?php require_once('style.php') ?>
 
 </head>
@@ -23,7 +23,7 @@ require_once('../models/select/select-cotisation.php');
     <div class="flex-1 flex flex-col">
         <!-- NAVBAR -->
         <header class="flex items-center justify-between bg-white dark:bg-gray-800 shadow px-4 py-3">
-            <h2 class="text-lg font-semibold text-primary">Cotisations</h2>
+            <h2 class="text-lg font-semibold text-primary">Js_Butembo</h2>
             <div class="flex items-center gap-4">
                 <button onclick="toggleDarkMode()" class="text-gray-600 dark:text-white">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">

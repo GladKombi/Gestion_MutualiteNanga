@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le : mer. 30 juil. 2025 à 23:43
--- Version du serveur : 10.4.22-MariaDB
--- Version de PHP : 8.1.1
+-- Host: 127.0.0.1
+-- Generation Time: Aug 09, 2025 at 07:52 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `gestion_mutuelite`
+-- Database: `gestion_mutuelite`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `adhesion`
+-- Table structure for table `adhesion`
 --
 
 CREATE TABLE `adhesion` (
@@ -33,20 +33,19 @@ CREATE TABLE `adhesion` (
   `membre` int(11) NOT NULL,
   `montant` double NOT NULL,
   `statut` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `adhesion`
+-- Dumping data for table `adhesion`
 --
 
 INSERT INTO `adhesion` (`id`, `date`, `membre`, `montant`, `statut`) VALUES
-(1, '2025-07-20', 1, 13, 0),
-(5, '2025-07-26', 2, 10, 0);
+(1, '2025-07-20', 1, 13, 0);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `annees`
+-- Table structure for table `annees`
 --
 
 CREATE TABLE `annees` (
@@ -54,10 +53,10 @@ CREATE TABLE `annees` (
   `libelle` varchar(50) NOT NULL,
   `libelle2` varchar(50) NOT NULL,
   `statut` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `annees`
+-- Dumping data for table `annees`
 --
 
 INSERT INTO `annees` (`id`, `libelle`, `libelle2`, `statut`) VALUES
@@ -66,7 +65,7 @@ INSERT INTO `annees` (`id`, `libelle`, `libelle2`, `statut`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cotisation`
+-- Table structure for table `cotisation`
 --
 
 CREATE TABLE `cotisation` (
@@ -76,10 +75,10 @@ CREATE TABLE `cotisation` (
   `type` int(11) NOT NULL,
   `montant` double NOT NULL,
   `statut` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `cotisation`
+-- Dumping data for table `cotisation`
 --
 
 INSERT INTO `cotisation` (`id`, `date`, `description`, `type`, `montant`, `statut`) VALUES
@@ -90,7 +89,7 @@ INSERT INTO `cotisation` (`id`, `date`, `description`, `type`, `montant`, `statu
 -- --------------------------------------------------------
 
 --
--- Structure de la table `membre`
+-- Table structure for table `membre`
 --
 
 CREATE TABLE `membre` (
@@ -105,20 +104,19 @@ CREATE TABLE `membre` (
   `photo` text NOT NULL,
   `statut` int(11) NOT NULL,
   `approbation` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `membre`
+-- Dumping data for table `membre`
 --
 
 INSERT INTO `membre` (`id`, `nom`, `postnom`, `prenom`, `email`, `adresse`, `fonction`, `pwd`, `photo`, `statut`, `approbation`) VALUES
-(1, 'kombi', 'Muvunga', 'glad', 'kombiMuvaunga@glad.com', 'Procure', 'Gérant', '1234', 'JSB68763773a992e.jpg', 0, 1),
-(2, 'Mumbere', 'Muyisa', 'Eloge', 'mumbere@gmail.com', 'Lobdon', 'Enseignant', '1234', 'JSB68856ab288d8e.jpg', 0, 1);
+(1, 'nanga', 'Asi', 'Asifiwe', 'kombiMuvaunga@glad.com', 'Procure', 'Gérant', '1234', 'JSB68763773a992e.jpg', 0, 1);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `paiement`
+-- Table structure for table `paiement`
 --
 
 CREATE TABLE `paiement` (
@@ -126,118 +124,154 @@ CREATE TABLE `paiement` (
   `date` date NOT NULL,
   `adhesion` int(11) NOT NULL,
   `cotisation` int(11) NOT NULL,
-  `montant` double NOT NULL,
+  `montant` int(11) NOT NULL,
   `statut` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `paiement`
+-- Dumping data for table `paiement`
 --
 
 INSERT INTO `paiement` (`id`, `date`, `adhesion`, `cotisation`, `montant`, `statut`) VALUES
-(1, '2025-07-28', 1, 1, 1, 0),
-(2, '2025-07-28', 1, 1, 9, 0),
-(3, '2025-07-28', 1, 3, 50, 0);
+(1, '2025-07-31', 1, 3, 12, 0);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `type_cotisation`
+-- Table structure for table `type_cotisation`
 --
 
 CREATE TABLE `type_cotisation` (
   `id` int(11) NOT NULL,
   `description` text NOT NULL,
   `statut` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `type_cotisation`
+-- Dumping data for table `type_cotisation`
 --
 
 INSERT INTO `type_cotisation` (`id`, `description`, `statut`) VALUES
 (1, 'Cotisation mensuel', 0),
 (2, 'developement web', 0);
 
+-- --------------------------------------------------------
+
 --
--- Index pour les tables déchargées
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `nom` varchar(100) NOT NULL,
+  `postnom` varchar(100) NOT NULL,
+  `prenom` varchar(100) NOT NULL,
+  `fonction` varchar(50) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `statut` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `nom`, `postnom`, `prenom`, `fonction`, `username`, `password`, `statut`) VALUES
+(1, 'glad', 'kombi', 'glad', 'admin', 'glad', '1234', 0),
+(2, 'glad', 'glad', 'glad', 'president', 'glad', '1234', 0),
+(3, 'glad', 'rr', 'muvunga', 'comptable', 'glad', '1234', 0);
+
+--
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `adhesion`
+-- Indexes for table `adhesion`
 --
 ALTER TABLE `adhesion`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `annees`
+-- Indexes for table `annees`
 --
 ALTER TABLE `annees`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cotisation`
+-- Indexes for table `cotisation`
 --
 ALTER TABLE `cotisation`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `membre`
+-- Indexes for table `membre`
 --
 ALTER TABLE `membre`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `paiement`
+-- Indexes for table `paiement`
 --
 ALTER TABLE `paiement`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `type_cotisation`
+-- Indexes for table `type_cotisation`
 --
 ALTER TABLE `type_cotisation`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `adhesion`
+-- AUTO_INCREMENT for table `adhesion`
 --
 ALTER TABLE `adhesion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `annees`
+-- AUTO_INCREMENT for table `annees`
 --
 ALTER TABLE `annees`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `cotisation`
+-- AUTO_INCREMENT for table `cotisation`
 --
 ALTER TABLE `cotisation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT pour la table `membre`
+-- AUTO_INCREMENT for table `membre`
 --
 ALTER TABLE `membre`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `paiement`
+-- AUTO_INCREMENT for table `paiement`
 --
 ALTER TABLE `paiement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `type_cotisation`
+-- AUTO_INCREMENT for table `type_cotisation`
 --
 ALTER TABLE `type_cotisation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

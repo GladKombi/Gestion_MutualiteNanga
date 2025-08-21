@@ -11,27 +11,10 @@ if (isset($_POST['theme'])) {
 // -- Lecture du thème --
 $theme = $_COOKIE['theme'] ?? 'light';
 
-// -- vérification des identifiants --
-$users = [
-    ['email' => '?', 'password' => password_hash('?', PASSWORD_DEFAULT)]
-];
-
-$error = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['password']) && !isset($_POST['theme'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    foreach ($users as $user) {
-        if ($user['email'] === $email && password_verify($password, $user['password'])) {
-            $_SESSION['user'] = $email;
-            header('Location: dashboard.php');
-            exit;
-        }
-    }
-
-    $error = 'Identifiants invalides';
+if(isset($_GET['fonction'])){
+    $fonction=$_GET['fonction'];
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="fr" class="<?= $theme === 'dark' ? 'dark' : '' ?>">
@@ -92,25 +75,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['pass
         <div class="w-full md:w-1/2 p-8">
             <h2 class="text-2xl font-semibold text-center mb-6">Connexion</h2>
 
-            <?php if ($error): ?>
+            <!-- <?php if ($error): ?>
                 <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
                     <?= htmlspecialchars($error) ?>
                 </div>
-            <?php endif; ?>
+            <?php endif; ?> -->
 
-            <form action="" method="post" class="space-y-5">
+            <form action="models/login.php?fonction=<?=$fonction?>" method="post" class="space-y-5">
                 <!-- Email -->
                 <div>
-                    <label for="email" class="block mb-1 text-sm font-medium">Adresse e-mail</label>
+                    <label for="email" class="block mb-1 text-sm font-medium">Adresse e-mail ou nom d'utilisateur</label>
                     <div class="flex items-center border border-gray-300 dark:border-gray-700 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 dark:text-gray-300 mr-2"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 12H8m0 0l4-4m-4 4l4 4" />
                         </svg>
-                        <input type="email" name="email" id="email" required
+                        <input type="text" name="username" id="email" required
                             class="w-full bg-transparent outline-none text-gray-900 dark:text-white placeholder-gray-400"
-                            placeholder="ex: nom@domaine.com" />
+                            placeholder="ex: username" />
                     </div>
                 </div>
 
@@ -131,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['pass
 
                 <!-- Bouton connexion -->
                 <button type="submit"
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded" name="connect">
                     Se connecter
                 </button>
             </form>
